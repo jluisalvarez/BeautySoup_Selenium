@@ -1,0 +1,21 @@
+import requests
+from bs4 import BeautifulSoup
+
+URL = "https://realpython.github.io/fake-jobs/"
+page = requests.get(URL)
+
+soup = BeautifulSoup(page.content, "html.parser")
+
+results = soup.find(id="ResultsContainer")
+
+# print(results.prettify())
+
+job_elements = results.find_all("div", class_="card-content")
+
+for job_element in job_elements:
+    title_element = job_element.find("h2", class_="title")
+    print(title_element.text)
+    links = job_element.find_all("a")
+    for link in links:
+        link_url = link["href"]
+        print("\t"+link.text+": "+link_url)
